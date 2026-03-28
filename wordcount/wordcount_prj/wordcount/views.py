@@ -10,7 +10,7 @@ def word_count(request):
 
 def result(request):
     #요청이 들어오면 fulltext 가져오기
-    entered_text = request.GET.get['fulltext']
+    entered_text = request.GET.get('fulltext')
     #entered_text 공백 기준 문자열로 나누기
     word_list = entered_text.split()
     
