@@ -10,9 +10,10 @@
         <h2>스터디 과제</h2>
         <h3>이름을 적어보세요!</h3>
         <form action="{% url 'wordcount:hello' %}" method="GET">
-            <input name="name"></input>
+            <input name="name" />
             <button type="submit">확인</button>
-        </form><br> 
+        </form>
+        <br />
         <a href="{% url 'wordcount:word_count' %}">wordcount 하러가기</a>
     </body>
 </html>
