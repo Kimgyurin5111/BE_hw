@@ -19,7 +19,8 @@ def create(request):
         
         post = Post.objects.create(
             title=title,
-            content=content
+            content=content,
+            author = request.user
         )
         return redirect('blog:list')
     # GET 요청이 들어오면 글 작성 폼 페이지를 렌더링
