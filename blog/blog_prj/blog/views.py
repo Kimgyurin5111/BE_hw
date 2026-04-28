@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect, get_object_or_404
-from .models import Post
+from .models import Post, Comment
 from django.contrib.auth.decorators import login_required
 
 def list(request):
@@ -40,4 +40,18 @@ def update(request, id):
 def delete(request, id):
     post = get_object_or_404(Post, id=id)
     post.delete()
+    return redirect('blog:list')
+
+@login_required
+def create_comment(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        
+        Comment.objects.create(
+            post=post,
+            content=content,
+            author=request.user
+        )
+        return redirect('blog:detail', post_id)
     return redirect('blog:list')
