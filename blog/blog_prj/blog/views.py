@@ -16,11 +16,15 @@ def create(request):
     if request.method == "POST":
         title = request.POST.get('title')
         content = request.POST.get('content')
+        image = request.FILES.get('image')
+        video = request.FILES.get('video')
         
         post = Post.objects.create(
             title=title,
             content=content,
-            author = request.user
+            author = request.user,
+            image = image,
+            video = video
         )
         return redirect('blog:list')
     # GET 요청이 들어오면 글 작성 폼 페이지를 렌더링
@@ -32,6 +36,17 @@ def update(request, id):
     if request.method == "POST":
         post.title = request.POST.get('title')
         post.content = request.POST.get('content')
+        image = request.FILES.get('image')
+        video = request.FILES.get('video')
+
+        if image:
+            post.image.delete()
+            post.image = image
+
+        if video:
+            post.video.delete()
+            post.video = video
+
         post.save()
         return redirect('blog:detail', id)
     
