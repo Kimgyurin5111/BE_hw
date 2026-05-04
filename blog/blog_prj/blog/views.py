@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from .models import Post, Comment
+from .models import Post, Comment
 from django.contrib.auth.decorators import login_required
 
 def list(request):
@@ -16,11 +17,15 @@ def create(request):
     if request.method == "POST":
         title = request.POST.get('title')
         content = request.POST.get('content')
+        image = request.FILES.get('image')
+        video = request.FILES.get('video')
         
         post = Post.objects.create(
             title=title,
             content=content,
-            author = request.user
+            author = request.user,
+            image = image,
+            video = video
         )
         return redirect('blog:list')
     # GET 요청이 들어오면 글 작성 폼 페이지를 렌더링
@@ -32,6 +37,17 @@ def update(request, id):
     if request.method == "POST":
         post.title = request.POST.get('title')
         post.content = request.POST.get('content')
+        image = request.FILES.get('image')
+        video = request.FILES.get('video')
+
+        if image:
+            post.image.delete()
+            post.image = image
+
+        if video:
+            post.video.delete()
+            post.video = video
+
         post.save()
         return redirect('blog:detail', id)
     
@@ -47,7 +63,7 @@ def create_comment(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     if request.method == 'POST':
         content = request.POST.get('content')
-        
+
         Comment.objects.create(
             post=post,
             content=content,
